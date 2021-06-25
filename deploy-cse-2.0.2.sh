@@ -26,6 +26,10 @@ EntryPoint(){
     cseServerFqdnDefault="cse-server.example.domain"
     cksServerFqdnDefault="cks.example.domain"
     cseIdpOtherInputAuthnDefault="Now"
+    cseCksUserDefault="No"
+    cseCksHmacIdDefault="#CKS_HMAC_TOKEN_ID="
+    cseCksHmacSecretDefault="#CKS_HMAC_TOKEN_SECRET="
+    cseCksFqdnDefault="#CKS_URL="
 
 
 
@@ -51,6 +55,10 @@ EntryPoint(){
     cseServerFqdn=""
     cksServerFqdn=""
     cseIdpOtherInputAuthn=""
+    cseCksUser=""
+    cseCksHmacId=""
+    cseCksHmacSecret=""
+    cseCksFqdn=""
 
     #Actions
     ShowLogo
@@ -58,9 +66,16 @@ EntryPoint(){
     GetCseDomain $cseServerFqdnDefault
     GetCseHmacId $cseHMACTokenIdDefault
     GetCseHmacSecret $cseHMACTokenSecretDefault
-    GetCksDomain $cksServerFqdnDefault
-    GetCksHmacId $cksHMACTokenIdDefault
-    GetCksHmacSecret $cksHMACTokenSecretDefault
+    GetCksUsage $cseCksUserDefault
+    if [ "$cseCksUser" = "Yes" ]; then
+        GetCksDomain $cksServerFqdnDefault
+        GetCksHmacId $cksHMACTokenIdDefault
+        GetCksHmacSecret $cksHMACTokenSecretDefault
+    else
+        cseCksHmacId=$cseCksHmacIdDefault
+        cseCksHmacSecret=$cseCksHmacSecretDefault
+        cseCksFqdn=$cseCksFqdnDefault
+    fi
     GetIdpProvier $cseIdpProviderDefault
     if [ "$cseIdpProvider" = "Google" ]; then
         GetGoogleAuthString $cseJWTAudAuthnValueDefault
@@ -100,6 +115,35 @@ EntryPoint(){
         esac
         echo " "
     }
+
+    GetCksUsage(){
+        local input=""
+        echo "Using Virtru CKS for Key Management?"
+        echo "  Options"
+        echo "  1 - Yes"
+        echo "  2 - No"
+        echo " "
+        read -p "Enter 1-2 [$1]: " input
+
+        case "$input" in
+            $blank )
+                cseCksUser="$1"
+            ;;
+            1 )
+                cseCksUser="Yes"
+            ;;
+            2 )
+                cseCksUser="No"
+            ;;
+            * )
+                cseCksUser="$input"
+            ;;
+        esac
+        echo " "
+
+    }
+
+
 
     GetIdpProvier(){
         local input=""
@@ -200,6 +244,8 @@ EntryPoint(){
             ;;
             esac
             echo " "
+        
+        
     }
 
 
@@ -217,6 +263,8 @@ EntryPoint(){
             ;;
             esac
             echo " "
+
+        
     }
 
 
@@ -234,6 +282,8 @@ EntryPoint(){
             ;;
             esac
             echo " "
+
+        cseCksHmacId="CKS_HMAC_TOKEN_ID=${cksHMACTokenId}"
     }
 
 
@@ -251,6 +301,8 @@ EntryPoint(){
             ;;
             esac
             echo " "
+
+        cseCksHmacSecret="CKS_HMAC_TOKEN_SECRET=${cksHMACTokenSecret}"
     }
 
     GetCseDomain(){
@@ -288,6 +340,8 @@ EntryPoint(){
             ;;
         esac
         echo " "
+
+        cseCksFqdn="CKS_URL=${cksServerFqdn}"
     }
     
     GetGoogleAuthString(){
@@ -407,8 +461,8 @@ EntryPoint(){
     
 HMAC_TOKEN_ID=$cseHMACTokenId
 HMAC_TOKEN_SECRET=$cseHMACTokenSecret
-CKS_HMAC_TOKEN_ID=$cksHMACTokenId
-CKS_HMAC_TOKEN_SECRET=$cksHMACTokenSecret
+$cseCksHmacId
+$cseCksHmacSecret
 JWKS_AUTHN_ISSUERS=$cseJWKSAuthnIssuers
 JWKS_AUTHZ_ISSUERS=$cseJWKSAuthzIssuers
 JWT_AUD=$cseJWTAud
@@ -416,7 +470,7 @@ JWT_KACLS_URL=$cseServerFqdn
 TAKEOUT_CLAIM=cse_takeout
 ACM_URL=https://api.virtru.com/acm/api
 ACCOUNTS_URL=https://api.virtru.com/accounts/api
-CKS_URL=$cksServerFqdn
+$cseCksFqdn
 PORT=443
 USE_SSL=true
         
@@ -488,7 +542,7 @@ chmod +x $runScript
         echo " "
         echo " run: cd /var/virtru/cse"
         echo " add: ssl certificate information"
-        if [ "$cseIdpOtherInputAuthn" != "Now" ]; then
+        if [ "$cseIdpOtherInputAuthn" != "Now" -a "$cseIdpProvider" != "Google" ]; then
             echo " add: base64 encoded AuthN values and base64 encoded JWT_AUD value"
         fi
         echo " run: sh run.sh"
