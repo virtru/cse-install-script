@@ -30,6 +30,9 @@ EntryPoint(){
     cseCksHmacIdDefault="#CKS_HMAC_TOKEN_ID="
     cseCksHmacSecretDefault="#CKS_HMAC_TOKEN_SECRET="
     cseCksFqdnDefault="#CKS_URL="
+    cseSecretKeyDefault="SECRET_KEY="
+    cseUseCksDefault="false"
+
 
 
 
@@ -59,6 +62,8 @@ EntryPoint(){
     cseCksHmacId=""
     cseCksHmacSecret=""
     cseCksFqdn=""
+    cseSecretKey=""
+    cseUseCks=""
 
     #Actions
     ShowLogo
@@ -71,10 +76,9 @@ EntryPoint(){
         GetCksDomain $cksServerFqdnDefault
         GetCksHmacId $cksHMACTokenIdDefault
         GetCksHmacSecret $cksHMACTokenSecretDefault
+        SetCksUserVars $cseCksUser
     else
-        cseCksHmacId=$cseCksHmacIdDefault
-        cseCksHmacSecret=$cseCksHmacSecretDefault
-        cseCksFqdn=$cseCksFqdnDefault
+        SetCksUserVars $cseCksUser
     fi
     GetIdpProvier $cseIdpProviderDefault
     if [ "$cseIdpProvider" = "Google" ]; then
@@ -447,6 +451,24 @@ EntryPoint(){
         echo " "
     }
 
+    GenerateCseSecretKey(){
+        cseSecretKeyValue=$(openssl rand 32 | base64)
+        cseSecretKey="${cseSecretKeyDefault}${cseSecretKeyValue}"
+    }
+
+    SetCksUserVars(){
+        if [ $1 = "Yes" ]; then
+            cseSecretKey="#SECRET_KEY="
+            cseUseCks="true"
+        else
+            GenerateCseSecretKey
+            cseUseCks=$cseUseCksDefault
+            cseCksHmacId=$cseCksHmacIdDefault
+            cseCksHmacSecret=$cseCksHmacSecretDefault
+            cseCksFqdn=$cseCksFqdnDefault
+        fi
+    }
+
     MakeEnv(){
         envFile=/var/virtru/cse/cse.env
 
@@ -457,8 +479,7 @@ EntryPoint(){
 
 
 
-        /bin/cat <<EOM >$envFile
-    
+        /bin/cat <<EOM >$envFile 
 HMAC_TOKEN_ID=$cseHMACTokenId
 HMAC_TOKEN_SECRET=$cseHMACTokenSecret
 $cseCksHmacId
@@ -473,7 +494,8 @@ ACCOUNTS_URL=https://api.virtru.com/accounts/api
 $cseCksFqdn
 PORT=443
 USE_SSL=true
-        
+$cseSecretKey
+USE_CKS=$cseUseCks        
 EOM
 
     }
@@ -487,7 +509,6 @@ EOM
 
 
         /bin/cat <<EOM >$runScript
-
 docker run --detach \\
 --env-file ./cse.env \\
 -p 443:443 \\
@@ -496,8 +517,6 @@ docker run --detach \\
 --restart unless-stopped \\
 --name cse-$cseVersion \\
 virtru/cse:v$cseVersion
-
-
 EOM
 
 chmod +x $runScript
