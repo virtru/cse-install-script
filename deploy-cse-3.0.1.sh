@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="3.0.0"
+    cseVersionDefault="3.0.1"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="443"
@@ -30,6 +30,9 @@ EntryPoint(){
     cseCksHmacIdDefault="#CKS_HMAC_TOKEN_ID="
     cseCksHmacSecretDefault="#CKS_HMAC_TOKEN_SECRET="
     cseCksFqdnDefault="#CKS_URL="
+    cseStandaloneSecretKeyNameDefault=""
+    cseStandaloneSecretKeyValueDefault=""
+    cseSecretKeyEnvValueDefault="#SECRET_KEY="
 
 
 
@@ -59,6 +62,9 @@ EntryPoint(){
     cseCksHmacId=""
     cseCksHmacSecret=""
     cseCksFqdn=""
+    cseStandaloneSecretKeyName=""
+    cseStandaloneSecretKeyValue=""
+    cseSecretKeyEnvValue=""
 
     #Actions
     ShowLogo
@@ -71,7 +77,9 @@ EntryPoint(){
         GetCksDomain $cksServerFqdnDefault
         GetCksHmacId $cksHMACTokenIdDefault
         GetCksHmacSecret $cksHMACTokenSecretDefault
+        cseSecretKeyEnvValue=$cseSecretKeyEnvValueDefault
     else
+        GenerateSecretKeyValue
         cseCksHmacId=$cseCksHmacIdDefault
         cseCksHmacSecret=$cseCksHmacSecretDefault
         cseCksFqdn=$cseCksFqdnDefault
@@ -453,6 +461,11 @@ EntryPoint(){
         openssl req -nodes -new -x509 -keyout /var/virtru/cse/server.key -out /var/virtru/cse/server.cert
     }
 
+    GenerateSecretKeyValue(){
+        cseStandaloneSecretKeyValue="$(openssl rand 32 | base64)"
+        cseSecretKeyEnvValue="SECRET_KEY=${cseStandaloneSecretKeyValue}"
+    }
+
     MakeEnv(){
         envFile=/var/virtru/cse/cse.env
 
@@ -479,6 +492,7 @@ ACCOUNTS_URL=https://api.virtru.com/accounts/api
 $cseCksFqdn
 PORT=443
 USE_SSL=true
+$cseSecretKeyEnvValue
         
 EOM
 
