@@ -601,7 +601,7 @@ chmod +x $runScript
         echo " "
         echo " run: cd /var/virtru/cse"
         echo " add: ssl certificate information"
-        if [ "$cseIdpOtherInputAuthn" != "Now" -a "$cseIdpProvider" != "Google" ]; then
+        if [ "$cseIdpOtherInputAuthn" != "Now" -a "$cseIdpProvider" = "Other" ]; then
             echo " add: base64 encoded AuthN values and base64 encoded JWT_AUD value"
         fi
         echo " run: sh run.sh"
