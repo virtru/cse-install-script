@@ -19,6 +19,7 @@ EntryPoint(){
     cseAuthzIssuersValueDefault="https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com"
     cseJWTAudAuthnKeyDefault="authn"
     cseJWTAudAuthnValueDefault="000000000000000000000000000000000.apps.googleusercontent.com"
+    cseOktaJWTAudAuthnValueDefault="yourClientId"
     cseHMACTokenIdDefault="000000000"
     cseHMACTokenSecretDefault="000000000"
     cksHMACTokenIdDefault="000000000"
@@ -33,6 +34,7 @@ EntryPoint(){
     cseStandaloneSecretKeyNameDefault=""
     cseStandaloneSecretKeyValueDefault=""
     cseSecretKeyEnvValueDefault="#SECRET_KEY="
+    cseOktaDomainDefault="example.okta.com"
 
 
 
@@ -65,6 +67,7 @@ EntryPoint(){
     cseStandaloneSecretKeyName=""
     cseStandaloneSecretKeyValue=""
     cseSecretKeyEnvValue=""
+    cseOktaDomain=""
 
     #Actions
     ShowLogo
@@ -87,6 +90,9 @@ EntryPoint(){
     GetIdpProvier $cseIdpProviderDefault
     if [ "$cseIdpProvider" = "Google" ]; then
         GetGoogleAuthString $cseJWTAudAuthnValueDefault
+    elif [ "$cseIdpProvider" = "Okta" ]; then
+        GetOktaDomain $cseOktaDomainDefault
+        GetJWTAudAuthn $cseOktaJWTAudAuthnValueDefault
     else
         InputAuthnNowLater $cseIdpOtherInputAuthnDefault
         if [ "$cseIdpOtherInputAuthn" = "Now" ]; then
@@ -99,6 +105,7 @@ EntryPoint(){
 
     MakeDirectories
     MakeSelfSignedCert
+    GenerateOktaAuthnValues
     GenerateB64Variables
     MakeEnv
     MakeRunScript
@@ -159,9 +166,10 @@ EntryPoint(){
         echo "IDP Provider"
         echo "  Options"
         echo "  1 - Google"
-        echo "  2 - Other"
+        echo "  2 - Okta"
+        echo "  3 - Other"
         echo " "
-        read -p "Enter 1-2 [$1]: " input
+        read -p "Enter 1-3 [$1]: " input
 
 
         case "$input" in
@@ -186,6 +194,14 @@ EntryPoint(){
                 cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
             ;;
             2 )
+                cseIdpProvider="Okta"
+                cseAuthzIssuersKey="\"$cseAuthzIssuersKeyDefault\""
+                cseAuthzIssuersValue="\"$cseAuthzIssuersValueDefault\""
+                cseJWTAudAuthnKey="\"$cseJWTAudAuthnKeyDefault\""
+                cseJWTAudAuthzKey="\"$cseJWTAudAuthzKeyDefault\""
+                cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
+            ;;
+            3 )
                 cseIdpProvider="Other"
                 cseAuthzIssuersKey="\"$cseAuthzIssuersKeyDefault\""
                 cseAuthzIssuersValue="\"$cseAuthzIssuersValueDefault\""
@@ -403,6 +419,24 @@ EntryPoint(){
         echo " "
     }
     
+    GetOktaDomain(){
+        local input=""
+        read -p "Enter your Okta Domain Value [$1]: " input
+
+
+
+
+        case "$input" in
+            $blank )
+                cseOktaDomain="$1"
+            ;;
+            * )
+                cseOktaDomain="$input"
+            ;;
+        esac
+        echo " "
+    }
+    
     
     GetJWTAudAuthn(){
         local input=""
@@ -464,6 +498,11 @@ EntryPoint(){
     GenerateSecretKeyValue(){
         cseStandaloneSecretKeyValue="$(openssl rand 32 | base64)"
         cseSecretKeyEnvValue="SECRET_KEY=${cseStandaloneSecretKeyValue}"
+    }
+
+    GenerateOktaAuthnValues(){
+        cseAuthnIssuersKey="\"https://$cseOktaDomain/oauth2/default\""
+        cseAuthnIssuersValue="\"https://$cseOktaDomain/oauth2/default/v1/keys\""
     }
 
     MakeEnv(){
