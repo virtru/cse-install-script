@@ -105,7 +105,9 @@ EntryPoint(){
 
     MakeDirectories
     MakeSelfSignedCert
-    GenerateOktaAuthnValues
+    if [ "$cseIdpProvider" = "Okta" ]; then
+        GenerateOktaAuthnValues
+    fi
     GenerateB64Variables
     MakeEnv
     MakeRunScript
