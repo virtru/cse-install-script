@@ -232,7 +232,7 @@ EntryPoint(){
 
     GenerateB64Variables(){
         #Authz Issuers
-        cseJWKSAuthzIssuers='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com" }'
+        cseJWKSAuthzIssuers=$cseAuthzIssuersKeyDefault
         cseJWKSAuthzIssuers=$(echo $cseJWKSAuthzIssuers | base64 -w 0)
 
 
