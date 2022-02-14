@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="3.0.2"
+    cseVersionDefault="4.0.0"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="443"
@@ -15,8 +15,7 @@ EntryPoint(){
     cseUseSSL="true"
     cseAuthnIssuersKeyDefault="https://accounts.google.com"
     cseAuthnIssuersValueDefault="https://www.googleapis.com/oauth2/v3/certs"
-    cseAuthzIssuersKeyDefault="gsuitecse-tokenissuer-drive@system.gserviceaccount.com"
-    cseAuthzIssuersValueDefault="https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com"
+    cseAuthzIssuersDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com" }'
     cseJWTAudAuthnKeyDefault="authn"
     cseJWTAudAuthnValueDefault="000000000000000000000000000000000.apps.googleusercontent.com"
     cseOktaJWTAudAuthnValueDefault="yourClientId"
@@ -45,8 +44,6 @@ EntryPoint(){
     cseAuthnIssuersKey=""
     cseAuthnIssuersValue=""
     cseJWKSAuthnIssuers=""
-    cseAuthzIssuersKey=""
-    cseAuthzIssuersValue=""
     cseJWKSAuthzIssuers=""
     cseJWTAudAuthnKey=""
     cseJWTAudAuthnValue=""
@@ -179,8 +176,6 @@ EntryPoint(){
                 cseIdpProvider=$cseIdpProviderDefault
                 cseAuthnIssuersKey="\"$cseAuthnIssuersKeyDefault\""
                 cseAuthnIssuersValue="\"$cseAuthnIssuersValueDefault\""
-                cseAuthzIssuersKey="\"$cseAuthzIssuersKeyDefault\""
-                cseAuthzIssuersValue="\"$cseAuthzIssuersValueDefault\""
                 cseJWTAudAuthnKey="\"$cseJWTAudAuthnKeyDefault\""
                 cseJWTAudAuthzKey="\"$cseJWTAudAuthzKeyDefault\""
                 cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
@@ -189,32 +184,24 @@ EntryPoint(){
                 cseIdpProvider=$cseIdpProviderDefault
                 cseAuthnIssuersKey="\"$cseAuthnIssuersKeyDefault\""
                 cseAuthnIssuersValue="\"$cseAuthnIssuersValueDefault\""
-                cseAuthzIssuersKey="\"$cseAuthzIssuersKeyDefault\""
-                cseAuthzIssuersValue="\"$cseAuthzIssuersValueDefault\""
                 cseJWTAudAuthnKey="\"$cseJWTAudAuthnKeyDefault\""
                 cseJWTAudAuthzKey="\"$cseJWTAudAuthzKeyDefault\""
                 cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
             ;;
             2 )
                 cseIdpProvider="Okta"
-                cseAuthzIssuersKey="\"$cseAuthzIssuersKeyDefault\""
-                cseAuthzIssuersValue="\"$cseAuthzIssuersValueDefault\""
                 cseJWTAudAuthnKey="\"$cseJWTAudAuthnKeyDefault\""
                 cseJWTAudAuthzKey="\"$cseJWTAudAuthzKeyDefault\""
                 cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
             ;;
             3 )
                 cseIdpProvider="Other"
-                cseAuthzIssuersKey="\"$cseAuthzIssuersKeyDefault\""
-                cseAuthzIssuersValue="\"$cseAuthzIssuersValueDefault\""
                 cseJWTAudAuthnKey="\"$cseJWTAudAuthnKeyDefault\""
                 cseJWTAudAuthzKey="\"$cseJWTAudAuthzKeyDefault\""
                 cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
             ;;
             * )
                 cseIdpProvider=$input
-                cseAuthzIssuersKey="\"$cseAuthzIssuersKeyDefault\""
-                cseAuthzIssuersValue="\"$cseAuthzIssuersValueDefault\""
                 cseJWTAudAuthnKey="\"$cseJWTAudAuthnKeyDefault\""
                 cseJWTAudAuthzKey="\"$cseJWTAudAuthzKeyDefault\""
                 cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
@@ -232,7 +219,7 @@ EntryPoint(){
 
     GenerateB64Variables(){
         #Authz Issuers
-        cseJWKSAuthzIssuers="{ \"gsuitecse-tokenissuer-drive@system.gserviceaccount.com\": \"https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com\",\"gsuitecse-tokenissuer-meet@system.gserviceaccount.com\": \"https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com\" }"
+        cseJWKSAuthzIssuers=$cseAuthzIssuersDefault
         cseJWKSAuthzIssuers=$(echo $cseJWKSAuthzIssuers | base64 -w 0)
 
 
