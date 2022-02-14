@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="3.0.2"
+    cseVersionDefault="4.0.0"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="443"
@@ -15,8 +15,8 @@ EntryPoint(){
     cseUseSSL="true"
     cseAuthnIssuersKeyDefault="https://accounts.google.com"
     cseAuthnIssuersValueDefault="https://www.googleapis.com/oauth2/v3/certs"
-    cseAuthzIssuersKeyDefault="gsuitecse-tokenissuer-drive@system.gserviceaccount.com"
-    cseAuthzIssuersValueDefault="https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com"
+    cseAuthzIssuersKeyDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com" }'
+    cseAuthzIssuersValueDefault=""
     cseJWTAudAuthnKeyDefault="authn"
     cseJWTAudAuthnValueDefault="000000000000000000000000000000000.apps.googleusercontent.com"
     cseOktaJWTAudAuthnValueDefault="yourClientId"
@@ -232,7 +232,7 @@ EntryPoint(){
 
     GenerateB64Variables(){
         #Authz Issuers
-        cseJWKSAuthzIssuers="{ \"gsuitecse-tokenissuer-drive@system.gserviceaccount.com\": \"https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com\",\"gsuitecse-tokenissuer-meet@system.gserviceaccount.com\": \"https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com\" }"
+        cseJWKSAuthzIssuers=$cseAuthzIssuersKeyDefault
         cseJWKSAuthzIssuers=$(echo $cseJWKSAuthzIssuers | base64 -w 0)
 
 
