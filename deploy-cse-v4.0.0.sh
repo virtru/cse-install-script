@@ -44,8 +44,6 @@ EntryPoint(){
     cseAuthnIssuersKey=""
     cseAuthnIssuersValue=""
     cseJWKSAuthnIssuers=""
-    cseAuthzIssuersKey=""
-    cseAuthzIssuersValue=""
     cseJWKSAuthzIssuers=""
     cseJWTAudAuthnKey=""
     cseJWTAudAuthnValue=""
