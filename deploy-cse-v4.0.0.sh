@@ -7,7 +7,7 @@ EntryPoint(){
     cseVersionDefault="4.0.0"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
-    csePort="443"
+    csePort="9000"
     cseJWTAudAuthzKeyDefault="authz"
     cseJWTAudAuthzValueDefault="cse-authorization"
     cseACMUrl="https://api.virtru.com/acm/api"
@@ -518,7 +518,7 @@ TAKEOUT_CLAIM=cse_takeout
 ACM_URL=https://api.virtru.com/acm/api
 ACCOUNTS_URL=https://api.virtru.com/accounts/api
 $cseCksFqdn
-PORT=443
+PORT=$csePort
 USE_SSL=true
 $cseSecretKeyEnvValue
         
@@ -538,7 +538,7 @@ EOM
 
 docker run --detach \\
 --env-file ./cse.env \\
--p 443:443 \\
+-p 443:9000 \\
 -v /var/virtru/cse/server.cert:/run/secrets/server.cert \\
 -v /var/virtru/cse/server.key:/run/secrets/server.key \\
 --restart unless-stopped \\
