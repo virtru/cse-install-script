@@ -538,7 +538,7 @@ EOM
 
 docker run --detach \\
 --env-file ./cse.env \\
--p 443:9000 \\
+-p 443:$csePort \\
 -v /var/virtru/cse/server.cert:/run/secrets/server.cert \\
 -v /var/virtru/cse/server.key:/run/secrets/server.key \\
 --restart unless-stopped \\
