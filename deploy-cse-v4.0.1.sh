@@ -30,6 +30,7 @@ EntryPoint(){
     cseCksHmacIdDefault="#CKS_HMAC_TOKEN_ID="
     cseCksHmacSecretDefault="#CKS_HMAC_TOKEN_SECRET="
     cseCksFqdnDefault="#CKS_URL="
+    cseCksUserEnvDefault="USE_CKS=false"
     cseStandaloneSecretKeyNameDefault=""
     cseStandaloneSecretKeyValueDefault=""
     cseSecretKeyEnvValueDefault="#SECRET_KEY="
@@ -61,6 +62,7 @@ EntryPoint(){
     cseCksHmacId=""
     cseCksHmacSecret=""
     cseCksFqdn=""
+    cseCksUserEnv=""
     cseStandaloneSecretKeyName=""
     cseStandaloneSecretKeyValue=""
     cseSecretKeyEnvValue=""
@@ -78,11 +80,13 @@ EntryPoint(){
         GetCksHmacId $cksHMACTokenIdDefault
         GetCksHmacSecret $cksHMACTokenSecretDefault
         cseSecretKeyEnvValue=$cseSecretKeyEnvValueDefault
+        cseCksUserEnv="USE_CKS=true"
     else
         GenerateSecretKeyValue
         cseCksHmacId=$cseCksHmacIdDefault
         cseCksHmacSecret=$cseCksHmacSecretDefault
         cseCksFqdn=$cseCksFqdnDefault
+        cseCksUserEnv=$cseCksUserEnvDefault
     fi
     GetIdpProvier $cseIdpProviderDefault
     if [ "$cseIdpProvider" = "Google" ]; then
@@ -520,6 +524,7 @@ ACCOUNTS_URL=https://api.virtru.com/accounts/api
 $cseCksFqdn
 PORT=$csePort
 USE_SSL=true
+$cseCksUserEnv
 $cseSecretKeyEnvValue
         
 EOM
