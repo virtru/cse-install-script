@@ -110,6 +110,7 @@ EntryPoint(){
         GenerateOktaAuthnValues
     fi
     GenerateB64Variables
+    MakeSecretsFile
     MakeEnv
     MakeRunScript
     clear
@@ -499,8 +500,18 @@ EntryPoint(){
         cseAuthnIssuersValue="\"https://$cseOktaDomain/oauth2/default/v1/keys\""
     }
     MakeSecretsFile(){
-        /bin/cat > /var/virtru/cse/secrets.json
-        sudo chmod 646 /var/virtru/cse/secrets.json
+        secretsFile=/var/virtru/cse/secrets.json
+
+
+
+        /bin/cat <<EOM >$secretsFile
+
+{"active":"my-existing-secret-name","secrets":[{"name":"my-existing-secret-name","value":"$cseStandaloneSecretKeyValue"}]}
+
+EOM
+        
+chmod 646 /var/virtru/cse/secrets.json
+    
     }
     
     MakeEnv(){
