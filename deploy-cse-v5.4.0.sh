@@ -505,9 +505,7 @@ EntryPoint(){
 
 
         /bin/cat <<EOM >$secretsFile
-
 {"active":"my-existing-secret-name","secrets":[{"name":"my-existing-secret-name","value":"$cseStandaloneSecretKeyValue"}]}
-
 EOM
         
 chmod 646 /var/virtru/cse/secrets.json
