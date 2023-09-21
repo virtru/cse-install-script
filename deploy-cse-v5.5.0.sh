@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="4.0.1"
+    cseVersionDefault="5.4.0"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="9000"
@@ -97,11 +97,11 @@ EntryPoint(){
     else
         InputAuthnNowLater $cseIdpOtherInputAuthnDefault
         if [ "$cseIdpOtherInputAuthn" = "Now" ]; then
-            GetAuthnIssuersKey $cseAuthnIssuersKeyDefault 
+            GetAuthnIssuersKey $cseAuthnIssuersKeyDefault
             GetAuthnIssuersValue $cseAuthnIssuersValueDefault
             GetJWTAudAuthn $cseJWTAudAuthnValueDefault
-        fi  
-        
+        fi
+
     fi
 
     MakeDirectories
@@ -110,6 +110,7 @@ EntryPoint(){
         GenerateOktaAuthnValues
     fi
     GenerateB64Variables
+    MakeSecretsFile
     MakeEnv
     MakeRunScript
     clear
@@ -211,14 +212,14 @@ EntryPoint(){
                 cseJWTAudAuthzValue="\"$cseJWTAudAuthzValueDefault\""
             ;;
         esac
-        echo " "    
+        echo " "
 
 
     }
 
 
 
- 
+
 
 
     GenerateB64Variables(){
@@ -231,7 +232,7 @@ EntryPoint(){
         if [ -n "${cseAuthnIssuersKey}" ]; then
             cseJWKSAuthnIssuers="{ $cseAuthnIssuersKey: $cseAuthnIssuersValue }"
             cseJWKSAuthnIssuers=$(echo $cseJWKSAuthnIssuers | base64 -w 0)
-            
+
             #JWT Aud Variable
             cseJWTAud="{ $cseJWTAudAuthnKey: $cseJWTAudAuthnValue, $cseJWTAudAuthzKey: $cseJWTAudAuthzValue }"
             cseJWTAud=$(echo $cseJWTAud | base64 -w 0)
@@ -239,7 +240,7 @@ EntryPoint(){
         else
             cseJWKSAuthnIssuers=""
         fi
-        
+
 
 
     }
@@ -258,8 +259,8 @@ EntryPoint(){
             ;;
             esac
             echo " "
-        
-        
+
+
     }
 
 
@@ -278,7 +279,7 @@ EntryPoint(){
             esac
             echo " "
 
-        
+
     }
 
 
@@ -357,7 +358,7 @@ EntryPoint(){
 
         cseCksFqdn="CKS_URL=${cksServerFqdn}"
     }
-    
+
     GetGoogleAuthString(){
         local input=""
         read -p "Enter your Google OAuth Client ID String [$1]: " input
@@ -393,7 +394,7 @@ EntryPoint(){
         esac
         echo " "
     }
-    
+
     GetAuthnIssuersValue(){
         local input=""
         read -p "Enter your AuthN Value [$1]: " input
@@ -411,7 +412,7 @@ EntryPoint(){
         esac
         echo " "
     }
-    
+
     GetOktaDomain(){
         local input=""
         read -p "Enter your Okta Domain Value [$1]: " input
@@ -429,8 +430,8 @@ EntryPoint(){
         esac
         echo " "
     }
-    
-    
+
+
     GetJWTAudAuthn(){
         local input=""
         read -p "Enter your JWT AuthN Value [$1]: " input
@@ -448,8 +449,8 @@ EntryPoint(){
         esac
         echo " "
     }
-    
-    
+
+
     InputAuthnNowLater(){
         local input=""
         echo "Enter AuthN Now?"
@@ -486,6 +487,7 @@ EntryPoint(){
 
     MakeSelfSignedCert(){
         openssl req -nodes -new -x509 -keyout /var/virtru/cse/server.key -out /var/virtru/cse/server.cert
+        sudo chmod 644 /var/virtru/cse/server.key
     }
 
     GenerateSecretKeyValue(){
@@ -497,7 +499,19 @@ EntryPoint(){
         cseAuthnIssuersKey="\"https://$cseOktaDomain/oauth2/default\""
         cseAuthnIssuersValue="\"https://$cseOktaDomain/oauth2/default/v1/keys\""
     }
+    MakeSecretsFile(){
+        secretsFile=/var/virtru/cse/secrets.json
 
+
+
+        /bin/cat <<EOM >$secretsFile
+{"active":"secret-key","secrets":[{"name":"secret-key","value":"$cseStandaloneSecretKeyValue"}]}
+EOM
+        
+chmod 646 /var/virtru/cse/secrets.json
+    
+    }
+    
     MakeEnv(){
         envFile=/var/virtru/cse/cse.env
 
@@ -509,7 +523,7 @@ EntryPoint(){
 
 
         /bin/cat <<EOM >$envFile
-    
+
 HMAC_TOKEN_ID=$cseHMACTokenId
 HMAC_TOKEN_SECRET=$cseHMACTokenSecret
 $cseCksHmacId
@@ -525,8 +539,14 @@ $cseCksFqdn
 PORT=$csePort
 USE_SSL=true
 $cseCksUserEnv
-$cseSecretKeyEnvValue
-        
+#$cseSecretKeyEnvValue
+SECRET_KEYS_PATH=/app/cse/secrets.json
+#The values below are only used for customer hosted EKM
+#EKM_JWT_AUTH_ISSUERS=aHR0cDovL2xvY2FsaG9zdDo5MDAwLGh0dHA6Ly9sb2NhbGhvc3Q6OTAwMC93aXRoL2EvcGF0aCxodHRwOi8vZmFrZUlzc3VlcixodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20=
+#Base 64 encoded value of EKM Audience URL that the customer is using as the FQDN
+#EKM_AUDIENCE=
+#EKM_SUPPORTED_SIGNING_ALGS=RS265
+
 EOM
 
     }
@@ -546,10 +566,10 @@ docker run --detach \\
 -p 443:$csePort \\
 -v /var/virtru/cse/server.cert:/run/secrets/server.cert \\
 -v /var/virtru/cse/server.key:/run/secrets/server.key \\
+-v /var/virtru/cse/secrets.json:/app/cse/secrets.json \\
 --restart unless-stopped \\
 --name cse-$cseVersion \\
 virtru/cse:v$cseVersion
-
 
 EOM
 
@@ -559,7 +579,7 @@ chmod +x $runScript
 
 
 
-    
+
     ShowLogo() {
     echo " "
     echo "                      +++                '++."
