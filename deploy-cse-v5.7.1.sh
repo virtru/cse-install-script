@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="5.3.1"
+    cseVersionDefault="5.7.1"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="9000"
@@ -110,6 +110,7 @@ EntryPoint(){
         GenerateOktaAuthnValues
     fi
     GenerateB64Variables
+    MakeSecretsFile
     MakeEnv
     MakeRunScript
     clear
@@ -498,7 +499,19 @@ EntryPoint(){
         cseAuthnIssuersKey="\"https://$cseOktaDomain/oauth2/default\""
         cseAuthnIssuersValue="\"https://$cseOktaDomain/oauth2/default/v1/keys\""
     }
+    MakeSecretsFile(){
+        secretsFile=/var/virtru/cse/secrets.json
 
+
+
+        /bin/cat <<EOM >$secretsFile
+{"active":"secret-key","secrets":[{"name":"secret-key","value":"$cseStandaloneSecretKeyValue"}]}
+EOM
+        
+chmod 646 /var/virtru/cse/secrets.json
+    
+    }
+    
     MakeEnv(){
         envFile=/var/virtru/cse/cse.env
 
@@ -526,7 +539,8 @@ $cseCksFqdn
 PORT=$csePort
 USE_SSL=true
 $cseCksUserEnv
-$cseSecretKeyEnvValue
+#$cseSecretKeyEnvValue
+SECRET_KEYS_PATH=/app/cse/secrets.json
 #The values below are only used for customer hosted EKM
 #EKM_JWT_AUTH_ISSUERS=aHR0cDovL2xvY2FsaG9zdDo5MDAwLGh0dHA6Ly9sb2NhbGhvc3Q6OTAwMC93aXRoL2EvcGF0aCxodHRwOi8vZmFrZUlzc3VlcixodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20=
 #Base 64 encoded value of EKM Audience URL that the customer is using as the FQDN
@@ -552,10 +566,10 @@ docker run --detach \\
 -p 443:$csePort \\
 -v /var/virtru/cse/server.cert:/run/secrets/server.cert \\
 -v /var/virtru/cse/server.key:/run/secrets/server.key \\
+-v /var/virtru/cse/secrets.json:/app/cse/secrets.json \\
 --restart unless-stopped \\
 --name cse-$cseVersion \\
-virtru/cse:v$cseVersion
-
+containers.virtru.com/cse:v$cseVersion
 
 EOM
 
