@@ -15,7 +15,7 @@ EntryPoint(){
     cseUseSSL="true"
     cseAuthnIssuersKeyDefault="https://accounts.google.com"
     cseAuthnIssuersValueDefault="https://www.googleapis.com/oauth2/v3/certs"
-    cseAuthzIssuersDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com" }'
+    cseAuthzIssuersDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com","gsuitecse-tokenissuer-gmail@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-gmail@system.gserviceaccount.com" }'
     cseJWTAudAuthnKeyDefault="authn"
     cseJWTAudAuthnValueDefault="000000000000000000000000000000000.apps.googleusercontent.com"
     cseOktaJWTAudAuthnValueDefault="yourClientId"
