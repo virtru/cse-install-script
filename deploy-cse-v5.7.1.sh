@@ -541,11 +541,7 @@ USE_SSL=true
 $cseCksUserEnv
 #$cseSecretKeyEnvValue
 SECRET_KEYS_PATH=/app/cse/secrets.json
-#The values below are only used for customer hosted EKM
-#EKM_JWT_AUTH_ISSUERS=aHR0cDovL2xvY2FsaG9zdDo5MDAwLGh0dHA6Ly9sb2NhbGhvc3Q6OTAwMC93aXRoL2EvcGF0aCxodHRwOi8vZmFrZUlzc3VlcixodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20=
-#Base 64 encoded value of EKM Audience URL that the customer is using as the FQDN
-#EKM_AUDIENCE=
-#EKM_SUPPORTED_SIGNING_ALGS=RS265
+
 
 EOM
 
