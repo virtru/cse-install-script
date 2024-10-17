@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="5.7.3"
+    cseVersionDefault="5.9.1"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="9000"
@@ -541,6 +541,15 @@ USE_SSL=true
 $cseCksUserEnv
 #$cseSecretKeyEnvValue
 SECRET_KEYS_PATH=/app/cse/secrets.json
+#GOOGLE_APPLICATION_CREDENTIALS=/app/cse/credentials.json
+#SERVICE_ACCOUNT_EMAIL=
+DRIVE_LABELS=false
+DRIVE_TIME=60
+DRIVE_LABELS_TIME=60
+ADMIN_TIME=60
+#LOG_LEVEL=debug
+CONTROL_CENTER_INFO=true
+
 
 
 EOM
