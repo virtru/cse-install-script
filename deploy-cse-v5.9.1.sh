@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="5.4.0"
+    cseVersionDefault="5.9.1"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="9000"
@@ -15,7 +15,7 @@ EntryPoint(){
     cseUseSSL="true"
     cseAuthnIssuersKeyDefault="https://accounts.google.com"
     cseAuthnIssuersValueDefault="https://www.googleapis.com/oauth2/v3/certs"
-    cseAuthzIssuersDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com" }'
+    cseAuthzIssuersDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com","gsuitecse-tokenissuer-gmail@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-gmail@system.gserviceaccount.com" }'
     cseJWTAudAuthnKeyDefault="authn"
     cseJWTAudAuthnValueDefault="000000000000000000000000000000000.apps.googleusercontent.com"
     cseOktaJWTAudAuthnValueDefault="yourClientId"
@@ -541,11 +541,16 @@ USE_SSL=true
 $cseCksUserEnv
 #$cseSecretKeyEnvValue
 SECRET_KEYS_PATH=/app/cse/secrets.json
-#The values below are only used for customer hosted EKM
-#EKM_JWT_AUTH_ISSUERS=aHR0cDovL2xvY2FsaG9zdDo5MDAwLGh0dHA6Ly9sb2NhbGhvc3Q6OTAwMC93aXRoL2EvcGF0aCxodHRwOi8vZmFrZUlzc3VlcixodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20=
-#Base 64 encoded value of EKM Audience URL that the customer is using as the FQDN
-#EKM_AUDIENCE=
-#EKM_SUPPORTED_SIGNING_ALGS=RS265
+#GOOGLE_APPLICATION_CREDENTIALS=/app/cse/credentials.json
+#SERVICE_ACCOUNT_EMAIL=
+DRIVE_LABELS=false
+DRIVE_TIME=60
+DRIVE_LABELS_TIME=60
+ADMIN_TIME=60
+#LOG_LEVEL=debug
+CONTROL_CENTER_INFO=true
+
+
 
 EOM
 
