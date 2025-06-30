@@ -540,7 +540,7 @@ PORT=$csePort
 USE_SSL=true
 $cseCksUserEnv
 #$cseSecretKeyEnvValue
-SECRET_KEYS_PATH=/app/cse/secrets.json
+#SECRET_KEYS_PATH=/app/cse/secrets.json
 #GOOGLE_APPLICATION_CREDENTIALS=/app/cse/credentials.json
 #SERVICE_ACCOUNT_EMAIL=
 DRIVE_LABELS=false
