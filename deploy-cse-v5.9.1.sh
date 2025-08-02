@@ -539,16 +539,18 @@ $cseCksFqdn
 PORT=$csePort
 USE_SSL=true
 $cseCksUserEnv
-#$cseSecretKeyEnvValue
+$cseSecretKeyEnvValue
 SECRET_KEYS_PATH=/app/cse/secrets.json
+
+#Uncomment the variables and values below to enable CSE Labels
 #GOOGLE_APPLICATION_CREDENTIALS=/app/cse/credentials.json
 #SERVICE_ACCOUNT_EMAIL=
-DRIVE_LABELS=false
-DRIVE_TIME=60
-DRIVE_LABELS_TIME=60
-ADMIN_TIME=60
+#DRIVE_LABELS=false
+#DRIVE_TIME=60
+#DRIVE_LABELS_TIME=60
+#ADMIN_TIME=60
 #LOG_LEVEL=debug
-CONTROL_CENTER_INFO=true
+#CONTROL_CENTER_INFO=true
 
 
 
