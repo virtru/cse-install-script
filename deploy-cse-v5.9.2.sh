@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="5.7.3"
+    cseVersionDefault="5.9.2"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="9000"
@@ -15,7 +15,7 @@ EntryPoint(){
     cseUseSSL="true"
     cseAuthnIssuersKeyDefault="https://accounts.google.com"
     cseAuthnIssuersValueDefault="https://www.googleapis.com/oauth2/v3/certs"
-    cseAuthzIssuersDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com","gsuitecse-tokenissuer-gmail@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-gmail@system.gserviceaccount.com" }'
+    cseAuthzIssuersDefault='{ "gsuitecse-tokenissuer-drive@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-drive@system.gserviceaccount.com","gsuitecse-tokenissuer-meet@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-meet@system.gserviceaccount.com","gsuitecse-tokenissuer-calendar@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-calendar@system.gserviceaccount.com","gsuitecse-tokenissuer-gmail@system.gserviceaccount.com": "https://www.googleapis.com/service_accounts/v1/jwk/gsuitecse-tokenissuer-gmail@system.gserviceaccount.com","https://www.googleapis.com/service_accounts/v1/jwk/apps-security-cse-kaclscommunication@system.gserviceaccount.com" : "apps-security-cse-kaclscommunication@system.gserviceaccount.com" }'
     cseJWTAudAuthnKeyDefault="authn"
     cseJWTAudAuthnValueDefault="000000000000000000000000000000000.apps.googleusercontent.com"
     cseOktaJWTAudAuthnValueDefault="yourClientId"
@@ -539,8 +539,19 @@ $cseCksFqdn
 PORT=$csePort
 USE_SSL=true
 $cseCksUserEnv
-#$cseSecretKeyEnvValue
+$cseSecretKeyEnvValue
 SECRET_KEYS_PATH=/app/cse/secrets.json
+
+#Uncomment the variables and values below to enable CSE Labels
+#GOOGLE_APPLICATION_CREDENTIALS=/app/cse/credentials.json
+#SERVICE_ACCOUNT_EMAIL=
+#DRIVE_LABELS=false
+#DRIVE_TIME=60
+#DRIVE_LABELS_TIME=60
+#ADMIN_TIME=60
+#LOG_LEVEL=debug
+#CONTROL_CENTER_INFO=true
+
 
 
 EOM
