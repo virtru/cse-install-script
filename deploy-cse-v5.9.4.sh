@@ -4,7 +4,7 @@ EntryPoint(){
 
     #Default Variables
     blank=""
-    cseVersionDefault="5.9.3"
+    cseVersionDefault="5.9.4"
     cseIdpProviderDefault="Google"
     cseTakeoutClaim="cse_takeout"
     csePort="9000"
